@@ -1,59 +1,84 @@
 <template>
   <section>
     <div class="access">
-      <img src="../../assets/login.PNG" alt="" />
+      <img src="../../assets/login.png" alt="" />
     </div>
-    <form @submit.prevent="submitForm">
-      <input v-model.trim="username" type="text" placeholder="username" />
-      <!-- <input v-model.trim="email" type="email" placeholder="admin@gmail.com" /> -->
-      <input v-model.trim="password" type="password" placeholder="*******" />
-      <p v-if="formIsValid" style="color: red">
-        Please enter a valid Name and password (must be at least 6 characters
-        long).
-      </p>
-      <!-- <input
-        v-model="confirmPassword"
-        type="password"
-        placeholder="confirm password"
-      /> -->
+    <form @submit.prevent="login">
+      <input type="text" id="username" v-model="username" required />
+      <input type="password" id="password" v-model="password" required />
 
-      <button type="submit">Log in</button>
+      <button type="submit">
+        <div v-if="isLoading" class="spinner">
+          <div class="sk-fading-circle">
+            <div class="sk-circle1 sk-circle"></div>
+            <div class="sk-circle2 sk-circle"></div>
+            <div class="sk-circle3 sk-circle"></div>
+            <div class="sk-circle4 sk-circle"></div>
+            <div class="sk-circle5 sk-circle"></div>
+            <div class="sk-circle6 sk-circle"></div>
+            <div class="sk-circle7 sk-circle"></div>
+            <div class="sk-circle8 sk-circle"></div>
+            <div class="sk-circle9 sk-circle"></div>
+            <div class="sk-circle10 sk-circle"></div>
+            <div class="sk-circle11 sk-circle"></div>
+            <div class="sk-circle12 sk-circle"></div>
+          </div>
+        </div>
+        <span v-if="!isLoading">Login</span>
+      </button>
     </form>
-    <span><a href="">Forgot Password</a></span>
   </section>
 </template>
 
 <script>
- import { mapActions } from 'vuex';
+import axios from 'axios';
 
 export default {
-data(){
-    return{
-        username:'',
-        // email:'',
-        password:'',
-        // confirmPassword:'',
-        formIsValid:false,
+  data() {
+    return {
+      username: '',
+      password: '',
+      isLoading:false
     };
-},
-
+  },
   methods: {
-    ...mapActions(['login']),
-    submitForm() {
-      this.login({ username: this.username, password: this.password })
-        .then(() => {
-           this.$router.push('/admindashboard');
+    login() {
+      const credentials = {
+        username: this.username,
+        password: this.password,
+      };
+this.isLoading=true
+      axios.post('https://smdd-server.onrender.com/api/login', credentials)
+        .then(response => {
+this.isLoading=false
+          // Save the token in local storage
+          const token = response.data.token;
+
+          localStorage.setItem('token', token);
+          // Redirect the user to the main page or perform any other action
+          this.$router.push('/AdminDashboard');
         })
-        .catch((error) => {
+        .catch(error => {
           // Handle login error
           console.error(error);
         });
     },
   },
-}
+  created() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    }
+  },
+};
 </script>
 
 <style scoped>
+p {
+  width: 100%;
+  height: 100vh;
+  text-align: center;
+}
 section {
   display: flex;
   flex-direction: column;
@@ -75,11 +100,11 @@ form {
   gap: 10px;
   width: 350px;
 }
-input {
+form input {
   width: 100%;
   padding: 7px 5px;
 }
-button {
+form button {
   width: 100%;
   padding: 10px;
   border: none;
@@ -93,5 +118,154 @@ span {
 }
 a {
   text-decoration: none;
+}
+
+/* spinner */
+.sk-fading-circle {
+  margin: 0 auto;
+  width: 40px;
+  height: 20px;
+  position: relative;
+}
+
+.sk-fading-circle .sk-circle {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.sk-fading-circle .sk-circle:before {
+  content: "";
+  display: block;
+  margin: 0 auto;
+  width: 15%;
+  height: 15%;
+  background-color: #fff;
+  border-radius: 100%;
+  -webkit-animation: sk-circleFadeDelay 1.2s infinite ease-in-out both;
+  animation: sk-circleFadeDelay 1.2s infinite ease-in-out both;
+}
+.sk-fading-circle .sk-circle2 {
+  -webkit-transform: rotate(30deg);
+  -ms-transform: rotate(30deg);
+  transform: rotate(30deg);
+}
+.sk-fading-circle .sk-circle3 {
+  -webkit-transform: rotate(60deg);
+  -ms-transform: rotate(60deg);
+  transform: rotate(60deg);
+}
+.sk-fading-circle .sk-circle4 {
+  -webkit-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+.sk-fading-circle .sk-circle5 {
+  -webkit-transform: rotate(120deg);
+  -ms-transform: rotate(120deg);
+  transform: rotate(120deg);
+}
+.sk-fading-circle .sk-circle6 {
+  -webkit-transform: rotate(150deg);
+  -ms-transform: rotate(150deg);
+  transform: rotate(150deg);
+}
+.sk-fading-circle .sk-circle7 {
+  -webkit-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+.sk-fading-circle .sk-circle8 {
+  -webkit-transform: rotate(210deg);
+  -ms-transform: rotate(210deg);
+  transform: rotate(210deg);
+}
+.sk-fading-circle .sk-circle9 {
+  -webkit-transform: rotate(240deg);
+  -ms-transform: rotate(240deg);
+  transform: rotate(240deg);
+}
+.sk-fading-circle .sk-circle10 {
+  -webkit-transform: rotate(270deg);
+  -ms-transform: rotate(270deg);
+  transform: rotate(270deg);
+}
+.sk-fading-circle .sk-circle11 {
+  -webkit-transform: rotate(300deg);
+  -ms-transform: rotate(300deg);
+  transform: rotate(300deg);
+}
+.sk-fading-circle .sk-circle12 {
+  -webkit-transform: rotate(330deg);
+  -ms-transform: rotate(330deg);
+  transform: rotate(330deg);
+}
+.sk-fading-circle .sk-circle2:before {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+.sk-fading-circle .sk-circle3:before {
+  -webkit-animation-delay: -1s;
+  animation-delay: -1s;
+}
+.sk-fading-circle .sk-circle4:before {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+.sk-fading-circle .sk-circle5:before {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+.sk-fading-circle .sk-circle6:before {
+  -webkit-animation-delay: -0.7s;
+  animation-delay: -0.7s;
+}
+.sk-fading-circle .sk-circle7:before {
+  -webkit-animation-delay: -0.6s;
+  animation-delay: -0.6s;
+}
+.sk-fading-circle .sk-circle8:before {
+  -webkit-animation-delay: -0.5s;
+  animation-delay: -0.5s;
+}
+.sk-fading-circle .sk-circle9:before {
+  -webkit-animation-delay: -0.4s;
+  animation-delay: -0.4s;
+}
+.sk-fading-circle .sk-circle10:before {
+  -webkit-animation-delay: -0.3s;
+  animation-delay: -0.3s;
+}
+.sk-fading-circle .sk-circle11:before {
+  -webkit-animation-delay: -0.2s;
+  animation-delay: -0.2s;
+}
+.sk-fading-circle .sk-circle12:before {
+  -webkit-animation-delay: -0.1s;
+  animation-delay: -0.1s;
+}
+
+@-webkit-keyframes sk-circleFadeDelay {
+  0%,
+  39%,
+  100% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+@keyframes sk-circleFadeDelay {
+  0%,
+  39%,
+  100% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
 }
 </style>

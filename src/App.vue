@@ -1,16 +1,11 @@
 
 <template>
-  <!-- <dash-board /> -->
-  <admin-login />
+  <router-view />
 </template>
+
 <script >
-// import DashBoard from './components/DashBoard.vue'
-import AdminLogin from './components/login/AdminLogin.vue'
-
-
 
 export default {
-  components: { AdminLogin },
 }
 </script>
 
