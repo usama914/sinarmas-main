@@ -6,7 +6,7 @@
       </div>
       <div class="admin">
         <img src="../assets/admin.png" alt="" />
-        <h5 class="title">Daniel Ric</h5>
+        <h5 class="title">Moin Shah</h5>
         <span>Admin</span>
       </div>
       <div class="links">
@@ -87,18 +87,14 @@ data(){
     this.fetchData()
   },
 methods:{
-  logout(){
-  localStorage.removeItem('token');
-   this.data = null;
-  this.$router.push('/');
-  // Check if the token is removed
-  const token = localStorage.getItem('token');
-      if (token === null) {
-        console.log('Token removed from local storage');
-      } else {
-        console.log('Token still exists in local storage');
-      }
-},
+   logout() {
+      // Remove the token from localStorage
+      localStorage.removeItem('token');
+
+      this.leaderBoard = null;
+      this.$router.push('/') 
+      window.location.reload();
+    },
   fetchData(){
     this.isLoading=true
     const token=localStorage.getItem('token');

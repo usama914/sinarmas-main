@@ -6,7 +6,7 @@
       </div>
       <div class="admin">
         <img src="../assets/admin.png" alt="" />
-        <h5 class="title">Daniel Ric</h5>
+        <h5 class="title">Moin Shah</h5>
         <span>Admin</span>
       </div>
       <div class="links">
@@ -31,30 +31,36 @@
         </ul>
       </div>
     </aside>
-    <section class="dashboard-content interface">
-      <section class="user-info">
-        <h2>Dashboard</h2>
-        <div class="boxes">
-          <div class="box">
-            <img src="../assets/newuser.png" alt="" />
-            <span>New Users</span>
-            <span>{{ data }}</span>
+    <div class="main-interface interface">
+      <section class="dashboard-content">
+        <section class="user-info">
+          <h2>Dashboard</h2>
+          <div class="boxes">
+            <div class="box">
+              <img src="../assets/newuser.png" alt="" />
+              <span>New Users</span>
+              <span>{{ data }}</span>
+            </div>
+            <div class="box">
+              <img src="../assets/activeusers.png" alt="" />
+              <span>Active Users</span>
+              <span>{{ data1 }}</span>
+            </div>
+            <div class="box">
+              <img src="../assets/totalusers.png" alt="" />
+              <span>Total Users</span>
+              <span>{{ data2 }}</span>
+            </div>
+            <div class="box">
+              <img src="../assets/game.png" alt="" />
+              <span>Total Game Plays Today</span>
+              <span>31</span>
+            </div>
           </div>
-          <div class="box">
-            <img src="../assets/activeusers.png" alt="" />
-            <span>Active Users</span>
-            <span>{{ data1 }}</span>
-          </div>
-          <div class="box">
-            <img src="../assets/totalusers.png" alt="" />
-            <span>Total Users</span>
-            <span>{{ data2 }}</span>
-          </div>
-          <div class="box">
-            <img src="../assets/game.png" alt="" />
-            <span>Total Game Plays Today</span>
-            <span>31</span>
-          </div>
+        </section>
+        <div id="chart">
+          <h2>User Statistic</h2>
+          <bar-chart />
         </div>
       </section>
       <section class="leaderboard">
@@ -90,13 +96,15 @@
           </tbody>
         </table>
       </section>
-    </section>
+    </div>
   </main>
 </template>
 
 <script>
 import axios from 'axios';
+import BarChart from '../charts/BarChart.vue';
 export default {
+  components: { BarChart },
 data(){
   return{
     data:null,
@@ -110,14 +118,17 @@ mounted(){
   this.activeUsers()
 },
 methods:{
-logout(){
-  localStorage.removeItem('token');
-   this.data = null;
-   this.data1 = null;
-   this.data2 = null;
-   this.data3 = null;
-  this.$router.push('/');
-},
+ logout() {
+      // Remove the token from localStorage
+      localStorage.removeItem('token');
+
+    this.data = null;
+    this.data1 = null;
+    this.data2 = null;
+    this.data3 = null;
+    this.$router.push('/')
+    window.location.reload();
+ },
   activeUsers(){
     this.isLoading=true;
 const token=localStorage.getItem('token');
@@ -162,6 +173,14 @@ const header={
 </script>
 
 <style scoped>
+canvas#my-chart-id {
+  width: 810px;
+}
+.main-interface {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
 .logo {
   margin-top: 3rem;
   height: 8rem;
@@ -227,7 +246,9 @@ ul li:hover {
 }
 .dashboard-content {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
+  flex-direction: column;
+  gap: 10rem;
 }
 .boxes {
   width: 750px;

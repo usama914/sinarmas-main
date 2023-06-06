@@ -6,7 +6,7 @@
       </div>
       <div class="admin">
         <img src="../assets/admin.png" alt="" />
-        <h5 class="title">Daniel Ric</h5>
+        <h5 class="title">Moin Shah</h5>
         <span>Admin</span>
       </div>
       <div class="links">
@@ -88,11 +88,14 @@ export default {
     this.fetchData()
   },
   methods: {
-logout(){
-  localStorage.removeItem('token');
-   this.data = null;
-  this.$router.push('/');
-},
+    logout() {
+      // Remove the token from localStorage
+      localStorage.removeItem('token');
+
+      this.data = null;
+      this.$router.push('/')
+      window.location.reload();
+    },
     fetchData() {
       this.isLoading=true
       // Get the token from local storage

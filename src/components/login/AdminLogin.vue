@@ -4,8 +4,21 @@
       <img src="../../assets/login.png" alt="" />
     </div>
     <form @submit.prevent="login">
-      <input type="text" id="username" v-model="username" required />
-      <input type="password" id="password" v-model="password" required />
+      <input
+        type="text"
+        id="username"
+        placeholder="Username"
+        v-model="username"
+        required
+        autocomplete="off"
+      />
+      <input
+        type="password"
+        id="password"
+        placeholder="**********"
+        v-model="password"
+        required
+      />
 
       <button type="submit">
         <div v-if="isLoading" class="spinner">
@@ -24,8 +37,11 @@
             <div class="sk-circle12 sk-circle"></div>
           </div>
         </div>
-        <span v-if="!isLoading">Login</span>
+        <span v-else-if="!isLoading">Login</span>
       </button>
+      <div v-if="error">
+        <span class="error-msg">{{ error }}</span>
+      </div>
     </form>
   </section>
 </template>
@@ -38,7 +54,8 @@ export default {
     return {
       username: '',
       password: '',
-      isLoading:false
+      isLoading:false,
+      error:''
     };
   },
   methods: {
@@ -47,10 +64,10 @@ export default {
         username: this.username,
         password: this.password,
       };
-this.isLoading=true
+      this.isLoading=true
       axios.post('https://smdd-server.onrender.com/api/login', credentials)
         .then(response => {
-this.isLoading=false
+        this.isLoading=false
           // Save the token in local storage
           const token = response.data.token;
 
@@ -60,7 +77,11 @@ this.isLoading=false
         })
         .catch(error => {
           // Handle login error
+          this.error = "Invalid user ! Please Try Again";
+          this.username='';
+          this.password='';
           console.error(error);
+          this.isLoading=false
         });
     },
   },
@@ -74,6 +95,9 @@ this.isLoading=false
 </script>
 
 <style scoped>
+.error-msg {
+  color: red;
+}
 p {
   width: 100%;
   height: 100vh;

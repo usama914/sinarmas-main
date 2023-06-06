@@ -6,7 +6,7 @@
       </div>
       <div class="admin">
         <img src="../assets/admin.png" alt="" />
-        <h5 class="title">Daniel Ric</h5>
+        <h5 class="title">Moin Shah</h5>
         <span>Admin</span>
       </div>
       <div class="links">
